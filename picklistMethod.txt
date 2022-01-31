@@ -1,0 +1,34 @@
+//Método picklist    
+    public List<SelectOption> getMinhasOpcoes(){
+        
+        //Mapear o campo de lista de seleção/picklist que desejo listar    
+        Schema.DescribeFieldResult describeResult = MyObject__c.FieldOfMyObject__c.getDescribe();
+        
+        //listar as opções válidas dentro do meu campo
+        List<Schema.PicklistEntry> entries = describeResult.getPickListValues();
+        
+        //Cria variável de retorno do tipo de lista para o objeto SelectOption       
+        List<SelectOption> optionsToReturn = new List<SelectOption>();
+        
+        //Adiciona as opções do campo listadas
+        for(Schema.PicklistEntry pEntry : entries){
+            
+            //se a opção esta ativa
+            //Ou pode aplicar o filtro que quiser, caso não queira mostrar todas as opções
+            if(pEntry.isActive()){
+                //Adiciona o nome e o valor na variável retorno
+                optionsToReturn.add(new SelectOption(pEntry.getValue(), pEntry.getLabel()));
+            }
+            
+        }
+        //Retorna a lista de selectOption criamos na variável de retorno
+        return optionsToReturn;     
+        
+    }    
+//how to refer to this
+//  <!-- Campo picklist --> 
+//  <apex:selectList value="{!variavelDeTipo}" multiselect="false" size="1" required="true" styleClass="slds-input">
+//  <!-- chamada para o método que preenche as opções sem utilizar o GET do método da controller-->
+//      <apex:selectOptions value="{!MinhasOpcoes}"/>                                 
+//  </apex:selectList>
+////From https://github.com/Forcenoob/Aulas 
